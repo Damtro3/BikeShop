@@ -74,10 +74,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Inject
-    public RecyclerViewAdapter(@Named("records") ArrayList<BikeModel> records, @Named("viewModel") SharedViewModel viewModel, @Named("Context") Context context) {
+    public RecyclerViewAdapter(@Named("records") ArrayList<BikeModel> records, @Named("viewModel") SharedViewModel viewModel, @Named("Context") Context context, @Named("buyList" ) List<BikeModel> buylList) {
         this.records = records;
         this.viewModel = viewModel;
         this.context = context;
+        this.buylList = buylList;
     }
 
     @Override

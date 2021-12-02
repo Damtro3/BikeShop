@@ -8,6 +8,7 @@ import com.foodsoft.bikeshop.ViewModel.SharedViewModel;
 import com.foodsoft.bikeshop.Views.Adapter.RecyclerViewAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Named;
 
@@ -30,6 +31,8 @@ public interface IRecyclerViewAdapter {
         @BindsInstance
         BuilderData context ( @Named("Context") Context context );
 
+        @BindsInstance
+        BuilderData buyList ( @Named("buyList") List<BikeModel> buylList );
         IRecyclerViewAdapter buildData();
     }
 }

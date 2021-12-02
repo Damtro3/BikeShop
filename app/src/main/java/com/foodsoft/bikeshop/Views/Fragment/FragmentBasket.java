@@ -11,9 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.foodsoft.bikeshop.DBManager.AppDatabase;
 import com.foodsoft.bikeshop.Interface.DaggerIListViewAdapter;
+import com.foodsoft.bikeshop.Interface.DaggerIRecyclerViewAdapter;
 import com.foodsoft.bikeshop.Interface.DaggerIStorageService;
 import com.foodsoft.bikeshop.Interface.IListViewAdapter;
+import com.foodsoft.bikeshop.Interface.IRecyclerViewAdapter;
 import com.foodsoft.bikeshop.Interface.IStorageService;
 import com.foodsoft.bikeshop.Model.BikeModel;
 import com.foodsoft.bikeshop.R;
@@ -43,18 +47,22 @@ public class FragmentBasket  extends Fragment  {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        AppDatabase db = AppDatabase.getDbInstance(getContext());
+        viewModel = ViewModelProviders.of(getActivity(), new SharedViewModel(getContext(), db,getFragmentManager())).get(SharedViewModel.class);
         liveDataChanger();
     }
 
+    public void uiChanger(List<BikeModel> value) {
+        adapter = DaggerIListViewAdapter.builder().context(getContext()).records((ArrayList) value).textViewResourceId(R.layout.adapter_basket).viewModel(viewModel).buildData();
+        bikeList.setAdapter(adapter.getComponent());
+        total.setText(String.valueOf(sumValueOfPrice(value)));
+    }
     public  void liveDataChanger()
     {
         viewModel.getBikeBuyList().observe(getViewLifecycleOwner(), new Observer<List<BikeModel>>() {
             @Override
             public void onChanged(List<BikeModel> value) {
-                adapter = DaggerIListViewAdapter.builder().context(getContext()).records((ArrayList) value).textViewResourceId(R.layout.adapter_basket).viewModel(viewModel).buildData();
-                bikeList.setAdapter(adapter.getComponent());
-                total.setText(String.valueOf(sumValueOfPrice(value)));
+                uiChanger(value);
             }
         });
 
